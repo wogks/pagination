@@ -3,16 +3,25 @@ import 'dart:io';
 
 import 'package:codefacprac/common/component/custom_text_form_field.dart';
 import 'package:codefacprac/common/const/colors.dart';
+import 'package:codefacprac/common/const/data.dart';
 import 'package:codefacprac/common/layout/default_layout.dart';
+import 'package:codefacprac/common/view/root_tab.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  @override
   Widget build(BuildContext context) {
     final dio = Dio();
+    const storage = FlutterSecureStorage();
     const emulatorIp = '10.0.2.2:3000';
     const simulatorIp = '127.0.0.1:3000';
     final ip = Platform.isIOS ? simulatorIp : emulatorIp;
@@ -60,6 +69,18 @@ class LoginScreen extends StatelessWidget {
                       ),
                     );
 
+                    final reto = resp.data['refreshToken'];
+                    final acto = resp.data['accessToken'];
+                    storage.write(key: REFRESH_TOKEN_KEY, value: reto);
+                    storage.write(key: ACCESS_TOKEN_KEY, value: acto);
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RootTab(),
+                      ),
+                    );
+
                     print(resp.data);
                   },
                   style: ElevatedButton.styleFrom(
@@ -79,6 +100,7 @@ class LoginScreen extends StatelessWidget {
                         headers: {'authorization': ' Bearer $refre'},
                       ),
                     );
+
                     print(resp.data);
                   },
                   style: TextButton.styleFrom(
