@@ -1,11 +1,9 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:codefacprac/common/const/colors.dart';
 import 'package:codefacprac/common/const/data.dart';
 import 'package:codefacprac/common/layout/default_layout.dart';
 import 'package:codefacprac/common/view/root_tab.dart';
-import 'package:codefacprac/main.dart';
 import 'package:codefacprac/user/view/login_screen.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -32,17 +30,31 @@ class _SplashScreenState extends State<SplashScreen> {
     final refreshToken = await storage.read(key: REFRESH_TOKEN_KEY);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
 
-    if (refreshToken == null || accessToken == null) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (_) => const LoginScreen(),
+    final dio = Dio();
+
+    try {
+      final resp = await dio.post(
+        'http://$ip/auth/token',
+        options: Options(
+          headers: {
+            'authorization': 'Bearer $refreshToken',
+          },
         ),
-        (route) => false,
       );
-    } else {
+
+      await storage.write(
+          key: ACCESS_TOKEN_KEY, value: resp.data['accessToken']);
+
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (_) => const RootTab(),
+        ),
+        (route) => false,
+      );
+    } catch (e) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => const LoginScreen(),
         ),
         (route) => false,
       );

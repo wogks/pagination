@@ -1,6 +1,5 @@
 import 'package:codefacprac/common/view/splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() {
   runApp(const _APP());
@@ -17,5 +16,3 @@ class _APP extends StatelessWidget {
     );
   }
 }
-
-const storage = FlutterSecureStorage();

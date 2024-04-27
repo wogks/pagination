@@ -2,22 +2,35 @@ import 'package:codefacprac/common/const/colors.dart';
 import 'package:flutter/material.dart';
 
 class RestaurantCard extends StatelessWidget {
+  // 이미지
   final Widget image;
+
+  // 레스토랑 이름
   final String name;
+
+  // 레스토랑 태그
   final List<String> tags;
-  final int ratingCount;
+
+  // 평점 갯수
+  final int ratingsCount;
+
+  // 배송걸리는 시간
   final int deliveryTime;
+
+  // 배송 비용
   final int deliveryFee;
-  final double rating;
+
+  // 평균 평점
+  final double ratings;
 
   const RestaurantCard({
     required this.image,
     required this.name,
     required this.tags,
-    required this.ratingCount,
+    required this.ratingsCount,
     required this.deliveryTime,
     required this.deliveryFee,
-    required this.rating,
+    required this.ratings,
     super.key,
   });
 
@@ -53,12 +66,12 @@ class RestaurantCard extends StatelessWidget {
               children: [
                 _IconText(
                   icon: Icons.star,
-                  label: rating.toString(),
+                  label: ratings.toString(),
                 ),
                 renderDot(),
                 _IconText(
                   icon: Icons.receipt,
-                  label: ratingCount.toString(),
+                  label: ratingsCount.toString(),
                 ),
                 renderDot(),
                 _IconText(
