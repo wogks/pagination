@@ -1,5 +1,6 @@
 import 'package:codefacprac/common/const/data.dart';
 import 'package:codefacprac/restaurant/component/restaurant_card.dart';
+import 'package:codefacprac/restaurant/model/restaurant_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -41,22 +42,9 @@ class RestaurantScreen extends StatelessWidget {
                   itemBuilder: (_, index) {
                     final item = snapshot.data![index];
 
-                    return RestaurantCard(
-                      image: Image.network(
-                        'http://$ip${item['thumbUrl']}',
-                        fit: BoxFit.cover,
-                      ),
-                      // image: Image.asset(
-                      //   'asset/img/food/ddeok_bok_gi.jpg',
-                      //   fit: BoxFit.cover,
-                      // ),
-                      name: item['name'],
-                      tags: List<String>.from(item['tags']),
-                      ratingsCount: item['ratingsCount'],
-                      deliveryTime: item['deliveryTime'],
-                      deliveryFee: item['deliveryFee'],
-                      ratings: item['ratings'],
-                    );
+                    final pItem = RestaurantModel.fromJson(json: item);
+
+                    return RestaurantCard.fromModel(model: pItem);
                   },
                   separatorBuilder: (_, index) {
                     return const SizedBox(height: 16.0);
